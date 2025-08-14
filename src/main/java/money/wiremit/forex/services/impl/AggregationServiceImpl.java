@@ -3,11 +3,19 @@ package money.wiremit.forex.services.impl;
 import money.wiremit.forex.common.enums.CurrencyPair;
 import money.wiremit.forex.config.webclient.ProviderClient;
 import money.wiremit.forex.models.RateRecord;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import money.wiremit.forex.repository.RateRecordRepository;
 import money.wiremit.forex.services.ifaces.AggregationService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
