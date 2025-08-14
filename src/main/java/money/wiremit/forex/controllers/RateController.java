@@ -1,5 +1,7 @@
 package money.wiremit.forex.controllers;
 
+import money.wiremit.forex.common.enums.CurrencyPair;
+import money.wiremit.forex.dtos.RateDtos;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -29,7 +31,7 @@ public class RateController {
     }
 
     @GetMapping("/rates/{currency}")
-    public RateView latestFor(@PathVariable("currency") String pair){
+    public RateDtos.RateView latestFor(@PathVariable("currency") String pair){
         var p = CurrencyPair.of(pair);
         var rec = repo.findFirstByPairOrderByFetchedAtDesc(p)
                 .orElseThrow(() -> new RuntimeException("No data yet for " + p));
@@ -37,22 +39,22 @@ public class RateController {
     }
 
     @GetMapping("/historical/rates")
-    public HistoricalResponse historical(
+    public RateDtos.HistoricalResponse historical(
             @RequestParam(required = false) String pair,
             @RequestParam @DateTimeFormat(iso= DateTimeFormat.ISO.DATE_TIME) OffsetDateTime from,
             @RequestParam @DateTimeFormat(iso= DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to){
         var p = pair==null? null : CurrencyPair.of(pair);
         var list = repo.search(p, from, to).stream().map(this::toView).toList();
-        return new HistoricalResponse(list);
+        return new RateDtos.HistoricalResponse(list);
     }
 
     @PostMapping("/rates/refresh")
-    public Mono<List<RateView>> forceRefresh(){
+    public Mono<List<RateDtos.RateView>> forceRefresh(){
         return aggregation.fetchAndStore().map(list -> list.stream().map(this::toView).toList());
     }
 
-    private RateView toView(com.wiremit.forex.domain.RateRecord r){
-        return new RateView(r.getPair(), r.getAvgRate(), r.getFinalRate(),
+    private RateDtos.RateView toView(com.wiremit.forex.domain.RateRecord r){
+        return new RateDtos.RateView(r.getPair(), r.getAvgRate(), r.getFinalRate(),
                 r.getMarkupType(), r.getMarkup(), r.getFetchedAt());
     }
 }

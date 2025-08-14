@@ -1,5 +1,6 @@
 package money.wiremit.forex.services.impl;
 
+import money.wiremit.forex.repository.UserAccountRepository;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 

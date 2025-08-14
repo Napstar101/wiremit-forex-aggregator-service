@@ -1,5 +1,9 @@
 package money.wiremit.forex.controllers;
 import jakarta.validation.Valid;
+import money.wiremit.forex.dtos.AuthDtos;
+import money.wiremit.forex.models.UserAccount;
+import money.wiremit.forex.repository.UserAccountRepository;
+import money.wiremit.forex.services.ifaces.JwtService;
 import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +20,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public void signup(@Valid @RequestBody SignupRequest req){
+    public void signup(@Valid @RequestBody AuthDtos.SignupRequest req){
         if(users.existsByEmail(req.email())) throw new RuntimeException("Email already used");
         var u = new UserAccount();
         u.setEmail(req.email());
@@ -25,8 +29,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@Valid @RequestBody LoginRequest req){
+    public AuthDtos.AuthResponse login(@Valid @RequestBody AuthDtos.LoginRequest req){
         authMgr.authenticate(new UsernamePasswordAuthenticationToken(req.email(), req.password()));
-        return new AuthResponse(jwt.generate(req.email()));
+        return new AuthDtos.AuthResponse(jwt.generate(req.email()));
     }
 }
