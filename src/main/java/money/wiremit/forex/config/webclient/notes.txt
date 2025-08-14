@@ -1,0 +1,7 @@
+Each provider returns a map of pair→rate. We’ll hit three free/public endpoints that don’t require keys:
+
+exchangerate.host
+
+frankfurter.app
+
+open.er-api.com
