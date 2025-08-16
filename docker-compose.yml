@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: forex
+      POSTGRES_PASSWORD: forex
+      POSTGRES_DB: forex
+    ports: ["5432:5432"]
+  api:
+    build: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/forex
+      SPRING_DATASOURCE_USERNAME: forex
+      SPRING_DATASOURCE_PASSWORD: forex
+    ports: ["8080:8080"]
+    depends_on: [db]
