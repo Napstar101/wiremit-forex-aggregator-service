@@ -40,11 +40,11 @@ This project is a Spring Boot backend service that aggregates forex rates from m
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/<your-username>/forex-aggregator.git
+git clone https://github.com/Napstar101/wiremit-forex-aggregator-service.git
 cd forex-aggregator
 ```
 
-### 2. Run with Maven (H2 in-memory DB for dev)
+### 2. Run with Maven (H2 in-memory DB for dev testing)
 
 ```bash
 mvn spring-boot:run
